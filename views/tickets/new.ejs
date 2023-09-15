@@ -1,20 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Ticket</title>
-</head>
-<body>
-    <h1>Create New Ticket</h1>
-    <form method="POST" action="/flights/<%= flightId %>/tickets">
-        <label for="seat">Seat:</label>
-        <input type="text" name="seat" required>
-        <br>
-        <label for="price">Price:</label>
-        <input type="number" name="price" min="0" required>
-        <br>
-        <button type="submit">Create Ticket</button>
-    </form>
-</body>
-</html>
+<%- include('../partials/header') %>
+
+<section id="badge-container">
+  <% tickets.forEach(function(t) { %>
+    <article class="badge"><%= t.seat %></article>
+  <% }) %>
+</section>
+
+<form id="add-ticket-form" action="/tickets" method="POST">
+  <label>Seat:</label>
+  <input name="seat" required pattern="[A-F][1-9]\d?">
+  <label>Price:</label>
+  <input type="number" name="price">
+  <label>Flight:</label>
+  <input type="text" name="flight">
+  <input type="submit" value="Add Ticket">
+</form>
+
+<%- include('../partials/footer') %>

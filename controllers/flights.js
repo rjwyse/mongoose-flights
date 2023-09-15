@@ -1,26 +1,15 @@
 const Flight = require('../models/flight');
+const Ticket = require('../models/ticket')
+
 
 module.exports = {
+  new: newFlight,
   index,
   show,
-  new: newflight,
   create,
+  addTicket
   
 };
-
-async function index(req, res, next) {
-  const flights = await Flight.find({});
-  res.render('flights/index', { title: 'All flights', flights });
-}
-
-async function show(req, res) {
-  const flight = await Flight.findById(req.params.id);
-  res.render('flights/show', { title: 'flight Detail', flight });
-}
-
-function newflight(req, res, next) {
-  res.render('flights/new', { title: 'Add flight', errorMsg: '' });
-}
 
 async function create(req, res) {
   try {
@@ -29,5 +18,36 @@ async function create(req, res) {
   } catch (err) {
       console.log(err)
       res.render('flight/new', { errorMsg: err.message })
+  }
+}
+
+function newFlight(req, res, next) {
+  res.render('flight/new', {
+      errorMsg: ''
+  })
+}
+
+async function index(req, res, next) {
+  const flights = await Flight.find()
+  res.render('flights/index', {
+      flights
+  })
+}
+
+async function show(req, res) {
+  console.log(req.params)
+  const flight = await Flight.findById(req.params.id) 
+  const ticket = await Ticket.find()
+  res.render('flights/show', { title: 'Flight Details', flight, ticket });
+}
+
+async function addTicket(req, res) {
+  const flight = await Flight.findById(req.params.flightId)
+  flight.tickets.push(req.body.ticketId)
+  try {
+      await flight.save()
+      res.redirect(`/flights/${flight._id}`)
+  } catch(err) {
+console.log(err)
   }
 }

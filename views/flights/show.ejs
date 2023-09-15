@@ -1,54 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Details</title>
-</head>
-<body>
-    <h1>Flight Details</h1>
-    <h2>Airline: <%= f.airline %></h2>
-    <h2>Airport: <%= f.airport %></h2>
-    <h2>Flight No.: <%= f.flightNo %></h2>
-    <h2>Departure: <%= f.departs.toISOString() %></h2>
-    
-    <!-- Form to add a destination -->
-    <h3>Add a Destination</h3>
-    <form method="POST" action="/flights/<%= flight._id %>/destinations">
-        <label for="airport">Airport:</label>
-        <select name="airport">
-            <option value="AUS">AUS</option>
-            <option value="DFW">DFW</option>
-            <option value="DEN">DEN</option>
-            <option value="LAX">LAX</option>
-            <option value="SAN">SAN</option>
-        </select>
-        <label for="arrival">Arrival Date/Time:</label>
-        <input type="datetime-local" name="arrival" required>
-        <button type="submit">Add Destination</button>
-    </form>
+<%- include('../partials/header') %>
 
-    <!-- List of destinations -->
-    <h3>Destinations</h3>
-    <ul>
-        <% flight.destinations.forEach((destination) => { %>
-            <li>
-                <strong>Airport:</strong> <%= destination.airport %><br>
-                <strong>Arrival:</strong> <%= destination.arrival.toISOString() %><br>
-            </li>
-        <% }); %>
-    </ul>
+<section id="show-page">
+  <div>Airline: </div>
+  <div><%= flight.airline %></div>
+  <div>Airport: </div>
+  <div><%= flight.airport %></div>
+  <div>Flight Number: </div>
+  <div><%= flight.flightNo %></div>
+  <div>Departs: </div>
+  <div><%= flight.departs %></div>
+</section>
 
-    <!-- Display a New Ticket link -->
-    <h3>Tickets</h3>
-    <ul>
-        <% tickets.forEach((ticket) => { %>
-            <li>
-                <strong>Seat:</strong> <%= ticket.seat %><br>
-                <strong>Price:</strong> <%= ticket.price %><br>
-            </li>
-        <% }); %>
-    </ul>
-    <a href="/flights/<%= flight._id %>/tickets/new">New Ticket</a>
-</body>
-</html>
+<div>Tickets</div>
+<ul>
+  <%- ticket.map(t =>
+  `<li>${t.seat}</li>`) %>
+</ul>
+
+<form id="add-ticket" action="/flights/<%- flight._id %>/tickets/new" method="POST">
+  <select name="ticketId">
+    <%- ticket.map(t => 
+      `<option value="${t._id}">${t.seat}</option>`
+    ) %>
+  </select>
+  <button type="submit">Add Ticket</button>
+</form>
+
+<br><br><h2>Destinations</h2>
+<form id="add-destination" method="POST"
+  action="/flights/<%= flight._id %>/destinations">
+  <label>Airport:</label>
+  <input type="text" name="airport"></input>
+  <label>Arrival:</label>
+  <input type="date" name="arrival">
+  <input type="submit" value="Add Destination">
+</form>
+
+<% if (flight.destinations.length) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Airport</th>
+        <th>Arrival</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% flight.destinations.forEach(function(f) { %>
+        <tr>
+          <td><%= f.airport %></td>
+          <td><%= f.arrival %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+<% } else { %>
+  <h5>No Layovers</h5>
+<% } %>
+
+<%- include('../partials/footer') %>
