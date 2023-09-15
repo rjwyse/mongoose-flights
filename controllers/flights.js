@@ -8,7 +8,7 @@ module.exports = {
   
 };
 
-async function index(req, res) {
+async function index(req, res, next) {
   const flights = await Flight.find({});
   res.render('flights/index', { title: 'All flights', flights });
 }
@@ -18,7 +18,7 @@ async function show(req, res) {
   res.render('flights/show', { title: 'flight Detail', flight });
 }
 
-function newflight(req, res) {
+function newflight(req, res, next) {
   res.render('flights/new', { title: 'Add flight', errorMsg: '' });
 }
 

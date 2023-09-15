@@ -7,10 +7,10 @@
 </head>
 <body>
     <h1>Flight Details</h1>
-    <h2>Airline: <%= flight.airline %></h2>
-    <h2>Airport: <%= flight.airport %></h2>
-    <h2>Flight No.: <%= flight.flightNo %></h2>
-    <h2>Departure: <%= flight.departs.toISOString() %></h2>
+    <h2>Airline: <%= f.airline %></h2>
+    <h2>Airport: <%= f.airport %></h2>
+    <h2>Flight No.: <%= f.flightNo %></h2>
+    <h2>Departure: <%= f.departs.toISOString() %></h2>
     
     <!-- Form to add a destination -->
     <h3>Add a Destination</h3>
@@ -38,5 +38,17 @@
             </li>
         <% }); %>
     </ul>
+
+    <!-- Display a New Ticket link -->
+    <h3>Tickets</h3>
+    <ul>
+        <% tickets.forEach((ticket) => { %>
+            <li>
+                <strong>Seat:</strong> <%= ticket.seat %><br>
+                <strong>Price:</strong> <%= ticket.price %><br>
+            </li>
+        <% }); %>
+    </ul>
+    <a href="/flights/<%= flight._id %>/tickets/new">New Ticket</a>
 </body>
 </html>
